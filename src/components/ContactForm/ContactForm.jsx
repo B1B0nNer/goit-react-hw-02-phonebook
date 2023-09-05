@@ -49,7 +49,7 @@ const ContactForm = ({ onSubmit }) => {
           ></Field>
           <ErrorMessage name="number" component="div" />
         </label>
-        <button type="submit">Add</button>
+        <button type="submit">Add contact</button>
       </Form>
     </Formik>
   );

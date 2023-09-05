@@ -52,8 +52,8 @@ export const App = () => {
   return (
     <>
       <h1>PhoneBook</h1>
-      <ContactForm onSubmit={addContact} />
-      <Filter value={filter} onFilterChange={onFilterChange} />
+        <ContactForm onSubmit={addContact} />
+        <Filter value={filter} onFilterChange={onFilterChange} />
       {contacts.length ? (
         <ContactList contactsList={visibleContacts} onDelete={deleteContact} />
       ) : (
