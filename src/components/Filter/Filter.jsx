@@ -1,18 +1,24 @@
-import { Form } from './Filter.styled';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-const Filter = ({ value, onChange }) => {
+const Filter = ({ value, onFilterChange }) => {
   return (
-    <Form>
-      <label htmlFor="filter">Find contacts by name</label>
-      <input type="text" name="filter" value={value} onChange={onChange} />
-    </Form>
+    <>
+      <h2>Find contact by name</h2>
+      <label htmlFor="filter">
+        <input
+          type="text"
+          name="filter"
+          value={value}
+          onChange={e => onFilterChange(e.target.value)}
+        />
+      </label>
+    </>
   );
 };
-
 Filter.propTypes = {
-  onChange: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
+  onFilterChange: PropTypes.func.isRequired,
 };
 
 export default Filter;

@@ -1,50 +1,34 @@
-import { Head, Table } from './ContactList.styled';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-const ContactList = ({ contacts, filter, onDelete }) => {
-  const visibleContactList = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
-  );
-
-  if (!visibleContactList.length) {
-    return <p>No contacts</p>;
-  }
-
+const ContactList = ({ contactsList, onDelete }) => {
   return (
-    <Table>
-      <Head>
-        <tr>
-          <th>Name</th>
-          <th>Number</th>
-          <th>x</th>
-        </tr>
-      </Head>
-      <tbody>
-        {visibleContactList.map(({ id, name, number }) => (
-          <tr key={id}>
-            <td>{name}</td>
-            <td>{number}</td>
-            <td>
-              <button type="button" onClick={() => onDelete(id)}>
-                x
-              </button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </Table>
+    <ul>
+      {contactsList.map(({ id, name, number }) => (
+        <li key={id}>
+          <span>{name} || </span>
+          <span> {number}</span>
+          <button
+            type="button"
+            onClick={() => onDelete(id)}
+            style={{ margin: 10 + 'px' }}
+          >
+            Delete
+          </button>
+        </li>
+      ))}
+    </ul>
   );
 };
 
 ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(
+  contactsList: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       number: PropTypes.string.isRequired,
     })
   ),
-  filter: PropTypes.string,
   onDelete: PropTypes.func.isRequired,
 };
 
