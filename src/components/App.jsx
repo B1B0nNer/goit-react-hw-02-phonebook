@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import ContactForm from './ContactForm';
 import ContactList from './ContactList';
 import Filter from './Filter';
 const shortid = require('shortid');
 
-export const App = () => {
-  const [contacts, setContacts] = useState([]);
-  const [filter, setFilter] = useState('');
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      contacts: [],
+      filter: '',
+    };
+  }
 
-  const addContact = (name, number) => {
+  addContact = (name, number) => {
+    const { contacts } = this.state;
     const isNameInList = contacts.find(
-      item => item.name.toLowerCase() === name.toLowerCase()
+      (item) => item.name.toLowerCase() === name.toLowerCase()
     );
     if (isNameInList !== undefined) {
       return alert(`Contact ${isNameInList.name} is already in your list !`);
@@ -20,33 +26,41 @@ export const App = () => {
       name,
       number,
     };
-    setContacts(prevContacts => [newContact, ...prevContacts]);
+    this.setState((prevState) => ({
+      contacts: [newContact, ...prevState.contacts],
+    }));
   };
 
-  const deleteContact = contactId => {
-    setContacts(prevContacts =>
-      prevContacts.filter(item => item.id !== contactId)
+  deleteContact = (contactId) => {
+    this.setState((prevState) => ({
+      contacts: prevState.contacts.filter((item) => item.id !== contactId),
+    }));
+  };
+
+  onFilterChange = (data) => {
+    this.setState({ filter: data });
+  };
+
+  render() {
+    const { contacts, filter } = this.state;
+    const normalizeFilterField = filter.toLowerCase();
+    const visibleContacts = contacts.filter((item) =>
+      item.name.toLowerCase().includes(normalizeFilterField)
     );
-  };
 
-  const onFilterChange = data => {
-    setFilter(data);
-  };
+    return (
+      <>
+        <h1>PhoneBook</h1>
+        <ContactForm onSubmit={this.addContact} />
+        <Filter value={filter} onFilterChange={this.onFilterChange} />
+        {contacts.length ? (
+          <ContactList contactsList={visibleContacts} onDelete={this.deleteContact} />
+        ) : (
+          <p>No Contacts Yet ^_^</p>
+        )}
+      </>
+    );
+  }
+}
 
-  const normalizeFilterField = filter.toLowerCase();
-  const visibleContacts = contacts.filter(item =>
-    item.name.toLowerCase().includes(normalizeFilterField)
-  );
-  return (
-    <>
-      <h1>PhoneBook</h1>
-        <ContactForm onSubmit={addContact} />
-        <Filter value={filter} onFilterChange={onFilterChange} />
-      {contacts.length ? (
-        <ContactList contactsList={visibleContacts} onDelete={deleteContact} />
-      ) : (
-        <p>No Contacts Yet ^_^</p>
-      )}
-    </>
-  );
-};
+export default App;
